@@ -1,0 +1,168 @@
+{
+  "name": "@hodgef/js-library-boilerplate",
+  "version": "2.0.14",
+  "description": "Javascript Starter Kit for building libraries",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "demo": "node scripts/demo.js",
+    "test": "node scripts/test.js",
+    "coverage": "node scripts/test.js --coverage --watchAll=false",
+    "postinstall": "node bin/postinstall",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hodgef/js-library-boilerplate"
+  },
+  "author": "Francisco Hodge <hello@franciscohodge.com> (https://github.com/hodgef)",
+  "bugs": {
+    "url": "https://github.com/hodgef/js-library-boilerplate/issues"
+  },
+  "homepage": "https://github.com/hodgef/js-library-boilerplate",
+  "keywords": [
+    "library"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/runtime": "^7.4.5",
+    "@svgr/webpack": "4.3.2",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
+    "@typescript-eslint/parser": "1.13.0",
+    "babel-eslint": "10.0.2",
+    "babel-jest": "24.8.0",
+    "babel-loader": "8.0.6",
+    "babel-plugin-named-asset-import": "^0.3.2",
+    "babel-preset-react-app": "^9.0.0",
+    "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "css-loader": "3.1.0",
+    "dotenv": "8.0.0",
+    "dotenv-expand": "5.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-loader": "2.2.1",
+    "eslint-plugin-flowtype": "3.10.4",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.14.3",
+    "eslint-plugin-react-hooks": "^1.5.0",
+    "file-loader": "4.1.0",
+    "fs-extra": "8.1.0",
+    "html-webpack-plugin": "4.0.0-beta.8",
+    "identity-obj-proxy": "3.0.0",
+    "is-wsl": "^2.0.0",
+    "jest": "24.8.0",
+    "jest-environment-jsdom-fourteen": "0.1.0",
+    "jest-resolve": "24.8.0",
+    "jest-watch-typeahead": "0.3.1",
+    "mini-css-extract-plugin": "0.8.0",
+    "optimize-css-assets-webpack-plugin": "5.0.3",
+    "pnp-webpack-plugin": "1.5.0",
+    "postcss-flexbugs-fixes": "4.1.0",
+    "postcss-loader": "3.0.0",
+    "postcss-normalize": "8.0.1",
+    "postcss-preset-env": "6.7.0",
+    "postcss-safe-parser": "4.0.1",
+    "react": "^16.8.6",
+    "react-app-polyfill": "^1.0.1",
+    "react-dev-utils": "^9.0.1",
+    "react-dom": "^16.8.6",
+    "resolve": "1.12.0",
+    "sass-loader": "7.1.0",
+    "semver": "6.3.0",
+    "style-loader": "0.23.1",
+    "terser-webpack-plugin": "1.4.1",
+    "url-loader": "2.1.0",
+    "webpack": "4.39.0",
+    "webpack-dev-server": "3.7.2",
+    "webpack-manifest-plugin": "2.0.4",
+    "workbox-webpack-plugin": "4.3.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "settings": {
+      "react": {
+        "pragma": "React",
+        "version": "detect"
+      }
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/lib/index.js",
+      "!src/demo/index.js",
+      "!src/utils/**",
+      "!src/**/*.d.ts",
+      "!**/tests/**"
+    ],
+    "resolver": "jest-pnp-resolver",
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [],
+    "testMatch": [
+      "<rootDir>/src/**/tests/**/*.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jest-environment-jsdom-fourteen",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "modulePaths": [],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties"
+      ]
+    ]
+  }
+}
