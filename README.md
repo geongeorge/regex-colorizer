@@ -36,8 +36,9 @@ RegexColorize.colorizeAll();
 
 ### self-host/cdn
 ```js
-<link href="./themes/default.css" rel="stylesheet">
-<script src="build/index.js"></script>
+<link href="https://unpkg.com/regex-colorize/themes/default.css" rel="stylesheet">
+
+<script src="//unpkg.com/regex-colorize"></script>
 
 let RegexColorize = window.RegexColorize.default;
 
