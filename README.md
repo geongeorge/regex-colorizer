@@ -5,6 +5,9 @@
   <blockquote>Color highlight your regex</blockquote>
 </div>
 
+## Demo
+
+See Slevithan's [demo page](http://stevenlevithan.com/regex/colorizer/)
 
 ## 📦 Getting Started
 
@@ -56,7 +59,7 @@ RegexColorizer.colorizeAll();
 - nobg.css
 - regexbuddy.css
 - regexpal.css
-- sweetest.css
+- sweetest.css (**NEW**)
 
 ## Credits 
 
