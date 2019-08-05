@@ -4,7 +4,7 @@
  */
 
 var RegexColorizer = (function () {
-    "use strict";
+    // "use strict";
 
 /*--------------------------------------
  *  Private variables
