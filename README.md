@@ -2,7 +2,7 @@
  
   <h2>Regex Colorizer</h2>
   <blockquote>Color highlight your regex</blockquote>
-  
+
   <img align="center" width="380" src="https://i.imgur.com/8kyJODb.png" /> 
 <br />
 
@@ -14,11 +14,14 @@
 See Slevithan's [demo page](http://stevenlevithan.com/regex/colorizer/)
 
 ## 📦 Getting Started
-
+**npm**
 ```
-npm install regex-colorizer
+npm install regex-colorizer --save
 ```
-
+**yarn**
+```
+yarn add regex-colorizer 
+```
 
 ## Install
 
