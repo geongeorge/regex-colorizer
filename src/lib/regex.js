@@ -1,5 +1,6 @@
-/*! Regex Colorizer v0.3.1
+/*! RegexColorizer v0.0.1
  * (c) 2010-2012 Steven Levithan <http://stevenlevithan.com/regex/colorizer/>
+ * (c) 2019 Geon George <http://geongeorge.com/>
  * MIT license
  */
 
