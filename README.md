@@ -1,6 +1,6 @@
  <div align="center">
  
-  <h2>Regex Colorizer</h2>
+  <h2>Regex Colorize</h2>
   <blockquote>Color highlight your regex</blockquote>
 
   <img align="center" width="380" src="https://i.imgur.com/8kyJODb.png" /> 
@@ -16,32 +16,32 @@ See Slevithan's [demo page](http://stevenlevithan.com/regex/colorizer/)
 ## 📦 Getting Started
 **npm**
 ```
-npm install regex-colorizer --save
+npm install regex-colorize --save
 ```
 **yarn**
 ```
-yarn add regex-colorizer 
+yarn add regex-colorize 
 ```
 
 ## Install
 
 ### npm
-```
-import RegexColorizer from 'regex-colorizer';
-import 'regex-colorizer/themes/default.css' // If you import a css file in your library
+```js
+import RegexColorize from 'regex-colorize';
+import 'regex-colorize/themes/default.css' // If you import a css file in your library
 
-RegexColorizer.colorizeAll();
+RegexColorize.colorizeAll();
 ...
 ```
 
 ### self-host/cdn
-```
+```js
 <link href="./themes/default.css" rel="stylesheet">
 <script src="build/index.js"></script>
 
-let RegexColorizer = window.RegexColorizer.default;
+let RegexColorize = window.RegexColorize.default;
 
-RegexColorizer.colorizeAll();
+RegexColorize.colorizeAll();
 ...
 ```
 
@@ -49,10 +49,10 @@ RegexColorizer.colorizeAll();
 
 ```js
 // Don't run this line if you provide your own stylesheet
-RegexColorizer.addStyleSheet();
+RegexColorize.addStyleSheet();
 
 // Can provide a class name for elements to process (defaults to class 'regex')
-RegexColorizer.colorizeAll();
+RegexColorize.colorizeAll();
 ```
 
 ```html

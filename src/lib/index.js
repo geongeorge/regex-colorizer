@@ -1,2 +1,2 @@
-import RegexColorizer from './regex';
-export default RegexColorizer;
+import RegexColorize from './regex';
+export default RegexColorize;

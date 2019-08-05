@@ -1,4 +1,4 @@
-import RegexColorizer from '../lib/index';
+import RegexColorize from '../lib/index';
 import '../lib/css/regexbuddy.css';
-// RegexColorizer.addStyleSheet();
-RegexColorizer.colorizeAll();
+// RegexColorize.addStyleSheet();
+RegexColorize.colorizeAll();
