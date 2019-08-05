@@ -1,6 +1,6 @@
 {
   "name": "regex-colorize",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Highlighter for JavaScript regex syntax",
   "main": "build/index.js",
   "scripts": {

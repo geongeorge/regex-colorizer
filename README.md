@@ -30,7 +30,8 @@ yarn add regex-colorize
 import RegexColorize from 'regex-colorize';
 import 'regex-colorize/themes/default.css' // If you import a css file in your library
 
-RegexColorize.colorizeAll();
+var rgx = new RegexColorize();
+rgx.colorizeAll();
 ...
 ```
 
@@ -40,20 +41,25 @@ RegexColorize.colorizeAll();
 
 <script src="//unpkg.com/regex-colorize"></script>
 
-let RegexColorize = window.RegexColorize.default;
+var RegexColorize = window.RegexColorize.default;
 
-RegexColorize.colorizeAll();
+var rgx = new RegexColorize();
+// rgx.addStyleSheet();
+rgx.colorizeAll();
 ...
 ```
 
 ## Usage
 
 ```js
+
+var rgx = new RegexColorize();
+
 // Don't run this line if you provide your own stylesheet
-RegexColorize.addStyleSheet();
+rgx.addStyleSheet();
 
 // Can provide a class name for elements to process (defaults to class 'regex')
-RegexColorize.colorizeAll();
+rgx.colorizeAll();
 ```
 
 ```html
