@@ -1,10 +1,12 @@
  <div align="center">
- <img align="center" width="380" src="https://i.imgur.com/8kyJODb.png" /> 
+ 
+  <h2>Regex Colorizer</h2>
+  <blockquote>Color highlight your regex</blockquote>
+  
+  <img align="center" width="380" src="https://i.imgur.com/8kyJODb.png" /> 
 <br />
 
  <img align="center" width="380" src="https://i.imgur.com/QGRly2q.png" /> 
-  <h2>Regex Colorizer</h2>
-  <blockquote>Color highlight your regex</blockquote>
 </div>
 
 ## Demo
