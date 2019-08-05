@@ -10,9 +10,8 @@ class RegexColorize {
     /*--------------------------------------
      *  Private variables
      *------------------------------------*/
-    constructor(cls="regex") {
+    constructor(cls) {
         this.myclass = cls || "regex";
-
         this.regexToken = /\[\^?]?(?:[^\\\]]+|\\[\S\s]?)*]?|\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9][0-9]*|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|c[A-Za-z]|[\S\s]?)|\((?:\?[:=!]?)?|(?:[?*+]|\{[0-9]+(?:,[0-9]*)?\})\??|[^.?*+^${[()|\\]+|./g;
         this.charClassToken = /[^\\-]+|-|\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|c[A-Za-z]|[\S\s]?)/g;
         this.charClassParts = /^(\[\^?)(]?(?:[^\\\]]+|\\[\S\s]?)*)(]?)$/;
@@ -516,8 +515,7 @@ class RegexColorize {
      * RegexColorizer.colorizeAll('my-class');
      */
     colorizeAll() {
-        let cls = this.myclass;
-        var els = this.elsByClass(cls),
+        var els = this.elsByClass(this.myclass),
             len = els.length,
             el, i;
         for (i = 0; i < len; i++) {

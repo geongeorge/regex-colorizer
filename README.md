@@ -31,6 +31,7 @@ import RegexColorize from 'regex-colorize';
 import 'regex-colorize/themes/default.css' // If you import a css file in your library
 
 var rgx = new RegexColorize();
+
 rgx.colorizeAll();
 ...
 ```
@@ -43,7 +44,7 @@ rgx.colorizeAll();
 
 var RegexColorize = window.RegexColorize.default;
 
-var rgx = new RegexColorize();
+var rgx = new RegexColorize(); 
 // rgx.addStyleSheet();
 rgx.colorizeAll();
 ...
@@ -54,6 +55,8 @@ rgx.colorizeAll();
 ```js
 
 var rgx = new RegexColorize();
+//new RegexColorize('my-regex'); to customize class names
+//note that themes won't work with different class names, so edit the css files as well
 
 // Don't run this line if you provide your own stylesheet
 rgx.addStyleSheet();

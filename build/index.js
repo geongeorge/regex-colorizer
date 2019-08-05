@@ -1,6 +1,6 @@
 /*!
  * 
- *   regex-colorize v0.0.1
+ *   regex-colorize v0.0.2
  *   https://github.com/geongeorge/regex-colorizer
  * 
  *   Copyright (c) Geon George (https://geongeorge.com)
