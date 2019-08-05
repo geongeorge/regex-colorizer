@@ -1,0 +1,21 @@
+/* Regex Colorizer RegexBuddy theme */
+
+.regex {
+    font-family: Monospace;
+}
+.regex b:hover     {background: hsla(210, 100%, 75%,0.6); color: #000080;} /* metasequence */
+.regex i:hover      {background: hsla(30, 100%, 75%,0.6); color: #603000;} /* char class */
+.regex i b:hover    {background: hsla(30, 67%, 63%,0.6); color: #302000;} /* char class: metasequence */
+.regex i u:hover    {background: hsla(30, 100%, 75%,0.6); color: #603000;} /* char class: range-hyphen */
+.regex b.g1:hover   {background: hsla(120, 100%, 38%,0.6); color: #ffffff;} /* group: depth 1 */
+.regex b.g2:hover   {background: hsla(60, 100%, 38%,0.6); color: #000000;} /* group: depth 2 */
+.regex b.g3:hover   {background: hsla(120, 100%, 25%,0.6); color: #ffffff;} /* group: depth 3 */
+.regex b.g4:hover   {background: hsla(120, 100%, 25%,0.6); color: #ffffff;} /* group: depth 4 */
+.regex b.g5:hover   {background: hsla(120, 100%, 50%,0.6); color: #000000;} /* group: depth 5 */
+.regex b.err {background: hsla(0, 100%, 50%,0.6); color: #ffffff;} /* error */
+.regex b, .regex i, .regex u {
+    font-weight: normal; 
+    font-style: normal; 
+    text-decoration: none;
+    border-radius: 5px;
+}

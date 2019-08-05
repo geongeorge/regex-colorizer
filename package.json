@@ -1,7 +1,7 @@
 {
-  "name": "@hodgef/js-library-boilerplate",
-  "version": "2.0.14",
-  "description": "Javascript Starter Kit for building libraries",
+  "name": "regex-colorizer",
+  "version": "0.1",
+  "description": "Highlighter for JavaScript regex syntax",
   "main": "build/index.js",
   "scripts": {
     "start": "node scripts/start.js",

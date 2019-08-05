@@ -1,2 +1,2 @@
-import App from './App';
-export default App;
+import RegexColorizer from './regex';
+export default RegexColorizer;
