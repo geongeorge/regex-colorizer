@@ -37,11 +37,13 @@ rgx.colorizeAll();
 ```
 
 ### self-host/cdn
-```js
+```html
 <link href="https://unpkg.com/regex-colorize/themes/default.css" rel="stylesheet">
 
 <script src="//unpkg.com/regex-colorize"></script>
+```
 
+```js
 var RegexColorize = window.RegexColorize.default;
 
 var rgx = new RegexColorize(); 
