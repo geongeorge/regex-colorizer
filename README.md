@@ -1,6 +1,7 @@
  <div align="center">
- <img align="center" width="180" src="https://i.imgur.com/8kyJODb.png" />
- <img align="center" width="180" src="https://i.imgur.com/QGRly2q.png" />
+ <img align="center" width="280" src="https://i.imgur.com/8kyJODb.png" />
+
+ <img align="center" width="280" src="https://i.imgur.com/QGRly2q.png" />
   <h2>Regex Colorizer</h2>
   <blockquote>Color highlight your regex</blockquote>
 </div>
