@@ -1,0 +1,11 @@
+build/
+coverage/
+node_modules/
+npm-debug.log*
+.vscode
+.idea
+.npm
+.eslintcache
+.env
+# Output of 'npm pack'
+*.tgz
