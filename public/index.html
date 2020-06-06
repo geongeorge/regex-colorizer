@@ -13,9 +13,9 @@
     <div id="root">
       <h2>Regex Colorizer</h2>
       <div style="margin-top: 20px;font-size: 2em;">
-        <code class="regex">/^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/</code>
+        <code class="regex">/^(?<=[A-Za-z0-9]+)(?&lt;name&gt;[ _-][A-Za-z0-9]+)*\k&lt;name&gt;$/</code>
       </div>
-      
+
     </div>
   </body>
 </html>
