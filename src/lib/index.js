@@ -354,13 +354,12 @@ class RegexColorize {
                     };
                 } else {
                     output += this.groupize(")", groupStyleDepth);
-                    /* Although at least in some browsers it is possible to quantify lookaheads,
-                     * this adds no value, doesn't work as you'd expect in JavaScript, and is an
-                     * error with some regex flavors such as PCRE (also ES5?), so flag them as
-                     * unquantifiable.
+                    /* Lookarounds can be quantified with ? or * to make them optional. This
+                     * behavior is supported in most browsers, so they should be marked as
+                     * quantifiable.
                      */
                     lastToken = {
-                        quantifiable: !/^<[\w_]+>|<=|<!|=|!$/.test(openGroups[openGroups.length - 1].opening.slice(2)),
+                        quantifiable: true,
                         style: "g" + groupStyleDepth
                     };
                     groupStyleDepth = groupStyleDepth === 1 ? 5 : groupStyleDepth - 1;
