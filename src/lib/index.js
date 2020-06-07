@@ -29,6 +29,7 @@ class RegexColorize {
             INVALID_GROUP_TYPE: "Invalid or unsupported group type",
             UNBALANCED_LEFT_PAREN: "Unclosed grouping",
             UNBALANCED_RIGHT_PAREN: "No matching opening parenthesis",
+            DUPLICATE_GROUP_NAME: "Duplicate group name",
             INVALID_NAMED_BACKREFERENCE: "No matching named capturing group",
             INTERVAL_OVERFLOW: "Interval quantifier cannot use value over 65,535",
             INTERVAL_REVERSED: "Interval quantifier range is reversed",
@@ -321,10 +322,14 @@ class RegexColorize {
                 if (m.length === 2) { // m is "(?"
                     output += this.errorize(m, this.error.INVALID_GROUP_TYPE);
                 } else {
+                    var duplicateName = false;
                     if (/\((?!\?)|\(\?<[\w_]+>/.test(m)) {
                         // Named capturing group
                         if (m.length > 1) {
-                            namedGroups.push(m.match(/\(\?<([\w_]+)>/)[1]);
+                            var groupName = m.match(/\(\?<([\w_]+)>/)[1];
+                            duplicateName = namedGroups.indexOf(groupName) !== -1;
+                            if (!duplicateName)
+                                namedGroups.push(groupName);
                         }
                         capturingGroupCount++;
                     }
@@ -334,12 +339,16 @@ class RegexColorize {
                      * regex. The value of index is the position plus the length of the opening <b>
                      * element with group-depth class.
                      */
+                    var opening = duplicateName ?
+                        this.errorize(this.expandHtmlEntities(m), this.error.DUPLICATE_GROUP_NAME) :
+                        this.expandHtmlEntities(m);
                     openGroups.push({
                         index: output.length + '<b class="gN">'.length,
-                        opening: this.expandHtmlEntities(m)
+                        opening: opening,
+                        hasError: duplicateName
                     });
                     // Add markup to the group-opening character sequence
-                    output += this.groupize(this.expandHtmlEntities(m), groupStyleDepth);
+                    output += this.groupize(opening, groupStyleDepth);
                 }
                 lastToken = {
                     quantifiable: false
@@ -353,7 +362,9 @@ class RegexColorize {
                         quantifiable: false
                     };
                 } else {
-                    output += this.groupize(")", groupStyleDepth);
+                    // Drop the last opening paren from depth tracking
+                    var openGroup = openGroups.pop();
+                    output += this.groupize(openGroup.hasError ? this.errorize(")", this.error.DUPLICATE_GROUP_NAME) : ")", groupStyleDepth);
                     /* Lookarounds can be quantified with ? or * to make them optional. This
                      * behavior is supported in most browsers, so they should be marked as
                      * quantifiable.
@@ -363,8 +374,6 @@ class RegexColorize {
                         style: "g" + groupStyleDepth
                     };
                     groupStyleDepth = groupStyleDepth === 1 ? 5 : groupStyleDepth - 1;
-                    // Drop the last opening paren from depth tracking
-                    openGroups.pop();
                 }
                 // Escape or backreference
             } else if (char0 === "\\") {
@@ -567,18 +576,18 @@ class RegexColorize {
     addStyleSheet = function () {
         var ss = document.createElement("style"),
             rules =
-            ".regex       {font-family: Monospace;} " +
-            ".regex b     {background: #aad1f7;} " + // metasequence
-            ".regex i     {background: #e3e3e3;} " + // char class
-            ".regex i b   {background: #9fb6dc;} " + // char class: metasequence
-            ".regex i u   {background: #c3c3c3;} " + // char class: range-hyphen
-            ".regex b.g1  {background: #b4fa50; color: #000;} " + // group: depth 1
-            ".regex b.g2  {background: #8cd400; color: #000;} " + // group: depth 2
-            ".regex b.g3  {background: #26b809; color: #fff;} " + // group: depth 3
-            ".regex b.g4  {background: #30ea60; color: #000;} " + // group: depth 4
-            ".regex b.g5  {background: #0c8d15; color: #fff;} " + // group: depth 5
-            ".regex b.err {background: #e30000; color: #fff;} " + // error
-            ".regex b, .regex i, .regex u {font-weight: normal; font-style: normal; text-decoration: none;}";
+                ".regex       {font-family: Monospace;} " +
+                ".regex b     {background: #aad1f7;} " + // metasequence
+                ".regex i     {background: #e3e3e3;} " + // char class
+                ".regex i b   {background: #9fb6dc;} " + // char class: metasequence
+                ".regex i u   {background: #c3c3c3;} " + // char class: range-hyphen
+                ".regex b.g1  {background: #b4fa50; color: #000;} " + // group: depth 1
+                ".regex b.g2  {background: #8cd400; color: #000;} " + // group: depth 2
+                ".regex b.g3  {background: #26b809; color: #fff;} " + // group: depth 3
+                ".regex b.g4  {background: #30ea60; color: #000;} " + // group: depth 4
+                ".regex b.g5  {background: #0c8d15; color: #fff;} " + // group: depth 5
+                ".regex b.err {background: #e30000; color: #fff;} " + // error
+                ".regex b, .regex i, .regex u {font-weight: normal; font-style: normal; text-decoration: none;}";
         ss.id = "regex-colorizer-ss";
         // Need to add to the DOM before setting cssText for IE < 9
         document.getElementsByTagName("head")[0].appendChild(ss);
