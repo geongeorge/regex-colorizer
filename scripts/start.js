@@ -137,11 +137,11 @@ checkBrowsers(paths.appPath, isInteractive)
       if(testMode){
         compiler.hooks.done.tap('done', (stats) => {
           stats = stats.toJson();
-      
+
           if (stats.errors && stats.errors.length > 0) {
               return;
           }
-  
+
           console.warn("App started in test mode. Closing in 5 seconds.");
           let closeTimeout = setTimeout(() => {
             clearTimeout(closeTimeout);

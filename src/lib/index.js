@@ -12,7 +12,7 @@ class RegexColorize {
      *------------------------------------*/
     constructor(cls) {
         this.myclass = cls || "regex";
-        this.regexToken = /\[\^?]?(?:[^\\\]]+|\\[\S\s]?)*]?|\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9][0-9]*|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|c[A-Za-z]|[\S\s]?)|\((?:\?[:=!]?)?|(?:[?*+]|\{[0-9]+(?:,[0-9]*)?\})\??|[^.?*+^${[()|\\]+|./g;
+        this.regexToken = /\[\^?]?(?:[^\\\]]+|\\[\S\s]?)*]?|\\(?:k<[\w_]+>|0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9][0-9]*|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|c[A-Za-z]|[\S\s]?)|\((?:\?(?:<[\w_]+>|<!|<=|:|=|!)?)?|(?:[?*+]|\{[0-9]+(?:,[0-9]*)?\})\??|[^.?*+^${[()|\\]+|./g;
         this.charClassToken = /[^\\-]+|-|\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|c[A-Za-z]|[\S\s]?)/g;
         this.charClassParts = /^(\[\^?)(]?(?:[^\\\]]+|\\[\S\s]?)*)(]?)$/;
         this.quantifier = /^(?:[?*+]|\{[0-9]+(?:,[0-9]*)?\})\??$/;
@@ -29,6 +29,8 @@ class RegexColorize {
             INVALID_GROUP_TYPE: "Invalid or unsupported group type",
             UNBALANCED_LEFT_PAREN: "Unclosed grouping",
             UNBALANCED_RIGHT_PAREN: "No matching opening parenthesis",
+            DUPLICATE_GROUP_NAME: "Duplicate group name",
+            INVALID_NAMED_BACKREFERENCE: "No matching named capturing group",
             INTERVAL_OVERFLOW: "Interval quantifier cannot use value over 65,535",
             INTERVAL_REVERSED: "Interval quantifier range is reversed",
             UNQUANTIFIABLE: "Quantifiers must be preceded by a token that can be repeated",
@@ -295,6 +297,8 @@ class RegexColorize {
             capturingGroupCount = 0,
             groupStyleDepth = 0,
             openGroups = [],
+            namedGroups = [],
+            namedBackrefs = [],
             lastToken = {
                 quantifiable: false,
                 type: this.type.NONE
@@ -318,7 +322,15 @@ class RegexColorize {
                 if (m.length === 2) { // m is "(?"
                     output += this.errorize(m, this.error.INVALID_GROUP_TYPE);
                 } else {
-                    if (m.length === 1) {
+                    var duplicateName = false;
+                    if (/\((?!\?)|\(\?<[\w_]+>/.test(m)) {
+                        // Named capturing group
+                        if (m.length > 1) {
+                            var groupName = m.match(/\(\?<([\w_]+)>/)[1];
+                            duplicateName = namedGroups.indexOf(groupName) !== -1;
+                            if (!duplicateName)
+                                namedGroups.push(groupName);
+                        }
                         capturingGroupCount++;
                     }
                     groupStyleDepth = groupStyleDepth === 5 ? 1 : groupStyleDepth + 1;
@@ -327,12 +339,16 @@ class RegexColorize {
                      * regex. The value of index is the position plus the length of the opening <b>
                      * element with group-depth class.
                      */
+                    var opening = duplicateName ?
+                        this.errorize(this.expandHtmlEntities(m), this.error.DUPLICATE_GROUP_NAME) :
+                        this.expandHtmlEntities(m);
                     openGroups.push({
                         index: output.length + '<b class="gN">'.length,
-                        opening: m
+                        opening: opening,
+                        hasError: duplicateName
                     });
                     // Add markup to the group-opening character sequence
-                    output += this.groupize(m, groupStyleDepth);
+                    output += this.groupize(opening, groupStyleDepth);
                 }
                 lastToken = {
                     quantifiable: false
@@ -346,19 +362,18 @@ class RegexColorize {
                         quantifiable: false
                     };
                 } else {
-                    output += this.groupize(")", groupStyleDepth);
-                    /* Although at least in some browsers it is possible to quantify lookaheads,
-                     * this adds no value, doesn't work as you'd expect in JavaScript, and is an
-                     * error with some regex flavors such as PCRE (also ES5?), so flag them as
-                     * unquantifiable.
+                    // Drop the last opening paren from depth tracking
+                    var openGroup = openGroups.pop();
+                    output += this.groupize(openGroup.hasError ? this.errorize(")", this.error.DUPLICATE_GROUP_NAME) : ")", groupStyleDepth);
+                    /* Lookarounds can be quantified with ? or * to make them optional. This
+                     * behavior is supported in most browsers, so they should be marked as
+                     * quantifiable.
                      */
                     lastToken = {
-                        quantifiable: !/^[=!]/.test(openGroups[openGroups.length - 1].opening.charAt(2)),
+                        quantifiable: true,
                         style: "g" + groupStyleDepth
                     };
                     groupStyleDepth = groupStyleDepth === 1 ? 5 : groupStyleDepth - 1;
-                    // Drop the last opening paren from depth tracking
-                    openGroups.pop();
                 }
                 // Escape or backreference
             } else if (char0 === "\\") {
@@ -389,9 +404,23 @@ class RegexColorize {
                         var parts = /^\\([0-3][0-7]{0,2}|[4-7][0-7]?|[89])([0-9]*)/.exec(m);
                         output += "<b>\\" + parts[1] + "</b>" + parts[2];
                     }
-                    lastToken = {
-                        quantifiable: true
-                    };
+                    lastToken = { quantifiable: true };
+                    //Named backreference
+                } else if (/k<[\w_]+>/.test(m)) {
+                    var groupName = m.match(/k<([\w_]+)>/)[1];
+                    /* Record the named backreference's position, character sequence and group name so
+                     * we can later mark it as invalid if it turns out to be referring to a non-existent
+                     * group name. The value of index is the position plus the length of the opening <b>
+                     * element.
+                     */
+                    namedBackrefs.push({
+                        index: output.length + '<b>'.length,
+                        token: this.expandHtmlEntities(m),
+                        groupName: groupName
+                    });
+                    // Add markup to the named backreference character sequence
+                    output += "<b>" + this.expandHtmlEntities(m) + "</b>";
+                    lastToken = { quantifiable: true };
                     // Metasequence
                 } else if (/^[0bBcdDfnrsStuvwWx]/.test(char1)) {
                     /* Browsers differ on how they handle:
@@ -498,6 +527,18 @@ class RegexColorize {
             );
             numCharsAdded += this.errorize("", this.error.UNBALANCED_LEFT_PAREN).length;
         }
+        numCharsAdded = 0;
+        for (i = 0; i < namedBackrefs.length; i++) {
+            if (namedGroups.indexOf(namedBackrefs[i].groupName) === -1) {
+                errorIndex = namedBackrefs[i].index + numCharsAdded;
+                output = (
+                    output.slice(0, errorIndex) +
+                    this.errorize(namedBackrefs[i].token, this.error.INVALID_NAMED_BACKREFERENCE) +
+                    output.slice(errorIndex + namedBackrefs[i].token.length)
+                );
+                numCharsAdded += this.errorize("", this.error.INVALID_NAMED_BACKREFERENCE).length;
+            }
+        }
 
         return output;
     };
@@ -535,18 +576,18 @@ class RegexColorize {
     addStyleSheet = function () {
         var ss = document.createElement("style"),
             rules =
-            ".regex       {font-family: Monospace;} " +
-            ".regex b     {background: #aad1f7;} " + // metasequence
-            ".regex i     {background: #e3e3e3;} " + // char class
-            ".regex i b   {background: #9fb6dc;} " + // char class: metasequence
-            ".regex i u   {background: #c3c3c3;} " + // char class: range-hyphen
-            ".regex b.g1  {background: #b4fa50; color: #000;} " + // group: depth 1
-            ".regex b.g2  {background: #8cd400; color: #000;} " + // group: depth 2
-            ".regex b.g3  {background: #26b809; color: #fff;} " + // group: depth 3
-            ".regex b.g4  {background: #30ea60; color: #000;} " + // group: depth 4
-            ".regex b.g5  {background: #0c8d15; color: #fff;} " + // group: depth 5
-            ".regex b.err {background: #e30000; color: #fff;} " + // error
-            ".regex b, .regex i, .regex u {font-weight: normal; font-style: normal; text-decoration: none;}";
+                ".regex       {font-family: Monospace;} " +
+                ".regex b     {background: #aad1f7;} " + // metasequence
+                ".regex i     {background: #e3e3e3;} " + // char class
+                ".regex i b   {background: #9fb6dc;} " + // char class: metasequence
+                ".regex i u   {background: #c3c3c3;} " + // char class: range-hyphen
+                ".regex b.g1  {background: #b4fa50; color: #000;} " + // group: depth 1
+                ".regex b.g2  {background: #8cd400; color: #000;} " + // group: depth 2
+                ".regex b.g3  {background: #26b809; color: #fff;} " + // group: depth 3
+                ".regex b.g4  {background: #30ea60; color: #000;} " + // group: depth 4
+                ".regex b.g5  {background: #0c8d15; color: #fff;} " + // group: depth 5
+                ".regex b.err {background: #e30000; color: #fff;} " + // error
+                ".regex b, .regex i, .regex u {font-weight: normal; font-style: normal; text-decoration: none;}";
         ss.id = "regex-colorizer-ss";
         // Need to add to the DOM before setting cssText for IE < 9
         document.getElementsByTagName("head")[0].appendChild(ss);
